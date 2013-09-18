@@ -19,7 +19,11 @@ E-mail: ysuga@sugarsweetrobotics.com
 URL: http://sugarsweetrobotics.com
 
 # License
+* LGPL v2.0
 * GPL v3.0
+
+Selectable.
+
 
 If you need another license, please contact author.
 
