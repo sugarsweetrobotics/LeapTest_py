@@ -60,19 +60,19 @@ class LeapTest(OpenRTM_aist.DataFlowComponentBase):
 	def __init__(self, manager):
 		OpenRTM_aist.DataFlowComponentBase.__init__(self, manager)
 
-		self._d_frame = ssr.Frame(0, 0, [])
+		self._d_frame = ssr.Frame(0, 0, [], [])
 		"""
 		"""
 		
 		self._frameIn = OpenRTM_aist.InPort("frame", self._d_frame)
-		circle = ssr.CircleGesture(0, 0, 0, ssr.Vector(0,0,0), ssr.Vector(0,0,0), 0)
-		swipe  = ssr.SwipeGesture(0, ssr.Vector(0, 0,0 ), 0)
-		key    = ssr.KeyTapGesture(0, ssr.Vector(0, 0, 0), ssr.Vector(0, 0, 0))
-		screen = ssr.ScreenTapGesture(0, ssr.Vector(0, 0, 0), ssr.Vector(0, 0, 0))
-		self._d_gesture = ssr.GestureFrame(0, 0, ssr.TYPE_INVALID, circle, swipe, key, screen)
+		#circle = ssr.CircleGesture(0, 0, 0, ssr.Vector(0,0,0), ssr.Vector(0,0,0), 0)
+		#swipe  = ssr.SwipeGesture(0, ssr.Vector(0, 0,0 ), 0)
+		#key    = ssr.KeyTapGesture(0, ssr.Vector(0, 0, 0), ssr.Vector(0, 0, 0))
+		#screen = ssr.ScreenTapGesture(0, ssr.Vector(0, 0, 0), ssr.Vector(0, 0, 0))
+		#self._d_gesture = ssr.GestureFrame(0, 0, ssr.TYPE_INVALID, circle, swipe, key, screen)
 		"""
 		"""
-		self._gestureIn = OpenRTM_aist.InPort("gesture", self._d_gesture)
+		#self._gestureIn = OpenRTM_aist.InPort("gesture", self._d_gesture)
 
 
 		
@@ -105,7 +105,7 @@ class LeapTest(OpenRTM_aist.DataFlowComponentBase):
 		
 		# Set InPort buffers
 		self.addInPort("frame",self._frameIn)
-		self.addInPort("gesture",self._gestureIn)
+		#self.addInPort("gesture",self._gestureIn)
 		
 		# Set OutPort buffers
 		
@@ -198,8 +198,28 @@ class LeapTest(OpenRTM_aist.DataFlowComponentBase):
 	def onExecute(self, ec_id):
 		if self._frameIn.isNew():
 			v = self._frameIn.read()
-			print v.id
-			print len(v.hands)
+			#print '[RTC::LeapTest] Frame - %s Timestamp - %s' % (v.id, v.timestamp)
+			for i, hand in enumerate(v.hands):
+				#print '[RTC::LeapTest] Hand[%s] - Position(%s) - Direction(%s) - Fingers(%s)' % (i, repr(hand.palmPosition), repr(hand.palmDirection), len(hand.fingers))
+				pass
+
+			for i, gesture in enumerate(v.gestures):
+				type_str = "invalid"
+				if gesture.type == ssr.TYPE_INVALID:
+					print '[RTC::LeapTest] InvalidGesture'
+				elif gesture.type == ssr.TYPE_SWIPE:
+					#print 'RTC::LeapTest] SwipeGesture'
+					print '[RTC::LeapTest] SwipeGesture - state %s, direction %s, speed %s' % (gesture.swipe.state, gesture.swipe.direction, gesture.swipe.speed)
+				elif gesture.type == ssr.TYPE_CIRCLE:
+					#print 'RTC::LeapTest] CircleGesture'
+					print '[RTC::LeapTest] CircleGesture - state %s, progress %s, radius %s, center %s, normal %s' % (gesture.circle.state, gesture.circle.progress, gesture.circle.radius, gesture.circle.center, gesture.circle.normal)
+				elif gesture.type == ssr.TYPE_SCREEN_TAP:
+					#print 'RTC::LeapTest] ScreenTapGesture'
+					print '[RTC::LeapTest] ScreentapGesture - state %s, direction %s, position %s' % (gesture.screen.state, gesture.screen.direction, gesture.screen.position)
+				elif gesture.type == ssr.TYPE_KEY_TAP:
+					#print 'RTC::LeapTest] KeyTapGesture'
+					print '[RTC::LeapTest] KeytapGesture - state %s, direction %s, position %s' % (gesture.key.state, gesture.key.direction, gesture.key.position)
+				
 		return RTC.RTC_OK
 	
 	#	##
