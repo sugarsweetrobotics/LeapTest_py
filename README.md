@@ -1,12 +1,13 @@
 LeapTest_py
 ===========
 
-* HOW TO USE
+# Requirement 
+* OpenRTM-aist 1.1 Python version
 
-- requirement 
-OpenRTM-aist 1.1 Python version.
 
-- build
-Compile IDL for dataport. Use idlcompile.bat or idlcompile.sh scripts.
+# HOW TO USE
+
+* Compile IDL for dataport. Use idlcompile.bat or idlcompile.sh scripts.
+* Execute LeapTest.py
 
 
